@@ -4,7 +4,9 @@ pipeline{
 
     agent any
     //agent { label 'Demo' }
-
+    tools {
+    jfrog 'jfrog-cli'
+    }
     parameters{
 
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
@@ -71,6 +73,11 @@ pipeline{
                    
                    mvnBuild()
                }
+            }
+        }
+        stage('Push to Jfrog Artifactory'){
+            steps{
+                jf 'rt u target/ java-jfrog-artifactory/'
             }
         }
         stage('Docker Image Build'){
